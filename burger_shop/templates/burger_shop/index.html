@@ -1,0 +1,58 @@
+{% extends 'burger_shop/base.html' %}
+
+{% block content %}
+<div class="content">
+    <h1>Welcome!</h1>
+        {% if user.is_authenticated %}
+            <div class="d-flex justify-content-center mt-4" style="margin-top: 20px; margin-bottom:20px;">
+                <a href="{% url 'burger_shop:start_order' %}" class="btn btn-success btn-md" style="margin-right: 20px">Start Your Order</a>
+                <a href="{% url 'burger_shop:create_burger' %}" class="btn btn-primary btn-md">Create custom burger</a>
+            </div>
+        {% else %}
+            <div class="text-center" style="margin-top: 20px; margin-bottom:20px;">
+                <h4 class="me-3">Sorry, only registered and loged in users can order or create custom burgers</h4>
+                <div>
+                    <a href="{% url 'login' %}" class="btn btn-primary" style="margin: 15px">Log In</a>
+                    <a href="{% url 'burger_shop:register' %}" class="btn btn-primary" style="margin: 15px">Register</a>
+                </div>
+            </div>
+        {% endif %}
+    <h4>Blog Posts:</h4>
+        <ul class="list-group">
+            {% for post in blog_posts %}
+                <li class="list-group-item" style="margin-top: 10px; margin-bottom: 10px; max-height: 250px; overflow: hidden;">
+                    <div class="row">
+                        <div class="col-md-4" >
+                            <img src="{{ post.image.url }}" alt="{{ post.title }}" class="img-fluid rounded" style="max-height: 230px; object-fit: cover; padding-bottom: 10px">
+                        </div>
+                        <div class="col-md-8 d-flex flex-column justify-content-between" style="padding-bottom: 20px;">
+                            <div style="overflow: hidden;">
+                                <h4>{{ post.title }}</h4>
+                                <p><small>By {{ post.author }} | {{ post.created_at|date:"F d, Y" }}</small></p>
+                                <p>{{ post.content|truncatewords:3|safe }}</p>
+                            </div>
+                            <a href="{% url 'burger_shop:blog_post' post.id %}" class="btn btn-primary btn-sm" style="max-width: 150px;">Read More</a>
+                        </div>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+        {% if blog_posts.has_other_pages %}
+            <ul class="pagination pagination-sm justify-content-center mt-4">
+                {% for nr in blog_posts.paginator.page_range %}
+                    {% if blog_posts.number == nr %}
+                        <li class="page-item active">
+                            <a class="page-link">{{ nr }}</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ nr }}">{{ nr }}</a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+    {% endif %}
+</div>
+
+
+{% endblock %}

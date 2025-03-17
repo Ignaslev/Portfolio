@@ -1,0 +1,16 @@
+{% extends 'burger_shop/base.html' %}
+
+{% block content %}
+
+<div class="d-flex align-items-center justify-content-center vh-100">
+    <div class="col-md-6 col-lg-4">
+        <div class="card shadow-lg p-4 rounded text-center">
+            <h3>Order Placed Successfully!</h3>
+            <p>Your order has been confirmed. Thank you!</p>
+            <a href="{% url 'burger_shop:user_orders' %}" class="btn btn-primary m-2">My orders</a>
+            <a href="{% url 'burger_shop:menu' %}" class="btn btn-primary m-2">Back to Menu</a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card mb-4" style="max-width: 100%; padding:20px;">
+    <h1>{{ post.title }}</h1>
+    <p><small>By {{ post.author }} | {{ post.created_at|date:"F d, Y" }}</small></p>
+    <div>{{ post.content|safe }}</div>
+    {% if post.content_image %}
+        <div class="text-center">
+            <img src="{{ post.content_image.url }}" alt="{{ post.title }}"
+                 class="img-fluid rounded"
+                 style="max-width: 500px; max-height: 800px; width: auto; height: auto; padding-bottom: 10px; margin-top:30px; object-fit: contain;">
+        </div>
+    {% endif %}
+    <div class="text-center mt-4">
+        <a href="{% url 'burger_shop:homepage' %}" class="btn btn-primary">Back to Home</a>
+    </div>
+</div>
+{% endblock %}

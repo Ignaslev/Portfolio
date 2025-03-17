@@ -1,0 +1,28 @@
+{% extends 'burger_shop/base.html' %}
+
+{% block content %}
+<div class="d-flex align-items-center justify-content-center vh-100">
+    <div class="col-md-6 col-lg-4">
+        <div class="card shadow-lg p-4 rounded">
+            <h2 class="text-center mb-4">Log in</h2>
+
+            <form action="{% url 'login' %}" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                        <label>Username</label>
+                        {{ form.username }}
+                </div>
+                <div class="form-group">
+                        <label>Password</label>
+                        {{ form.password }}
+                </div>
+
+                <input type="submit" value="Login" style="margin-bottom:15px;">
+                <input type="hidden" name="next" value="/burger_shop/home/">
+            </form>
+            <p><a href="{% url 'burger_shop:password_reset' %}">Forgot password?</a></p>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

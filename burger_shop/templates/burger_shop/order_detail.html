@@ -1,0 +1,207 @@
+{% extends 'burger_shop/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="content">
+<h4>Your Order:</h4>
+<ul class="list-group mb-3">
+    {% for item in order_items %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            {% if item.menu_item %}
+            <span><strong> {{ item.menu_item.name }}</strong> x {{ item.quantity }} – {{ item.total_item_price }} EUR.</span>
+            <span>Nutrition: Calories: {{ item.item_total_nutrition.calories }},
+                Protein: {{ item.item_total_nutrition.protein }}g,
+                Fat: {{ item.item_total_nutrition.fat }}g,
+                Carbs: {{ item.item_total_nutrition.carbs }}g</span>
+            {% elif item.custom_burger %}
+                <span><strong>Custom burger: {{ item.custom_burger.name }}</strong> x {{ item.quantity }} – {{ item.total_item_price }} EUR</span>
+                <span>Nutrition: Calories: {{ item.item_total_nutrition.calories }},
+                Protein: {{ item.item_total_nutrition.protein }}g,
+                Fat: {{ item.item_total_nutrition.fat }}g,
+                Carbs: {{ item.item_total_nutrition.carbs }}g</span>
+            {% endif %}
+            <form method="post" style="display:inline;">
+                {% csrf_token %}
+                <input type="hidden" name="remove_item_id" value="{{ item.id }}">
+                <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+            </form>
+        </li>
+    {% empty %}
+        <li class="list-group-item">Your order is empty.</li>
+    {% endfor %}
+</ul>
+
+<div class="d-flex justify-content-between mb-3">
+   <p><strong>Total:</strong> {{ total_price }} eur</p>
+</div>
+<p><strong>Nutrition:</strong></p>
+<div class="d-flex justify-content-between mb-3">
+    <ul>
+    {% for nutrient, value in order.total_nutrition.items %}
+        <li><strong>{{ nutrient|title }}:</strong> {{ value }}</li>
+    {% empty %}
+        <li>No nutrition information available.</li>
+    {% endfor %}
+    </ul>
+</div>
+
+<h2>Menu:</h2>
+
+<h4>Burgers:</h4>
+<div class="row">
+    {% for burger in burgers %}
+        <div class="col-sm-6 col-md-3 d-flex align-items-stretch">
+            <div class="card mb-4 shadow">
+                {% if burger.image %}
+                    <img class="card-img-top" src="{{ burger.image.url }}" style="object-fit: contain;">
+                {% else %}
+                    <img class="card-img-top" src="{% static 'img/no-image.png' %}">
+                {% endif %}
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="item_type" value="menu_item">
+                    <input type="hidden" name="item_id" value="{{ burger.id }}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ burger.name }}</h5>
+                        <p class="card-text"><strong>Price:</strong> {{ burger.price }}eur</p>
+                        <input type="number" name="quantity" value="1" min="1" class="form-control mb-2" style="width: 80px;">
+                        <button type="submit" class="btn btn-primary">Add to Order</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+<h4>Sides:</h4>
+<div class="row">
+    {% for side in sides %}
+        <div class="col-sm-6 col-md-3 d-flex align-items-stretch">
+            <div class="card mb-4 shadow">
+                {% if side.image %}
+                    <img class="card-img-top" src="{{ side.image.url }}" style="object-fit: contain;">
+                {% else %}
+                    <img class="card-img-top" src="{% static 'img/no-image.png' %}">
+                {% endif %}
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="item_type" value="menu_item">
+                    <input type="hidden" name="item_id" value="{{ side.id }}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ side.name }}</h5>
+                        <p class="card-text"><strong>Price:</strong> {{ side.price }}eur</p>
+                        <input type="number" name="quantity" value="1" min="1" class="form-control mb-2" style="width: 80px;">
+                        <button type="submit" class="btn btn-primary">Add to Order</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+<h4>Your custom burgers:</h4>
+<div class="row">
+    {% if user_burgers %}
+        {% for burger in user_burgers %}
+            <div class="col-sm-6 col-md-3 d-flex align-items-stretch">
+                <div class="card mb-4 shadow">
+                    {% if burger.image %}
+                        <img class="card-img-top" src="{{ burger.image.url }}" style="object-fit: contain;">
+                    {% else %}
+                        <img class="card-img-top" src="{% static 'img/no-image.png' %}">
+                    {% endif %}
+                    <form method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="item_type" value="custom_burger">
+                        <input type="hidden" name="item_id" value="{{ burger.id }}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ burger.name }}</h5>
+                            <p class="card-text"><strong>Price:</strong> {{ burger.total_price }}eur</p>
+                            <input type="number" name="quantity" value="1" min="1" class="form-control mb-2" style="width: 80px;">
+                            <button type="submit" class="btn btn-primary">Add to Order</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <h4>You dont have custom burgers yet</h4>
+    {% endif %}
+</div>
+
+{% if user_burgers.has_other_pages %}
+    <ul class="pagination pagination-sm justify-content-center mt-4">
+    {% for nr in user_burgers.paginator.page_range %}
+        {% if user_burgers.number == nr %}
+            <li class="page-item active">
+                <a class="page-link">{{ nr }}</a>
+            </li>
+        {% else %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ nr }}">{{ nr }}</a>
+            </li>
+        {% endif %}
+    {% endfor %}
+    </ul>
+{% endif %}
+
+<h4>Drinks:</h4>
+<div class="row">
+    {% for drink in drinks %}
+        <div class="col-sm-6 col-md-3 d-flex align-items-stretch">
+            <div class="card mb-4 shadow">
+                {% if drink.image %}
+                    <img class="card-img-top" src="{{ drink.image.url }}" style="object-fit: contain;">
+                {% else %}
+                    <img class="card-img-top" src="{% static 'img/no-image.png' %}">
+                {% endif %}
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="item_type" value="menu_item">
+                    <input type="hidden" name="item_id" value="{{ drink.id }}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ drink.name }}</h5>
+                        <p class="card-text"><strong>Price:</strong> {{ drink.price }}eur</p>
+                        <input type="number" name="quantity" value="1" min="1" class="form-control mb-2" style="width: 80px;">
+                        <button type="submit" class="btn btn-primary">Add to Order</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+<h4>Your Order:</h4>
+<ul class="list-group mb-3">
+    {% for item in order_items %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            {% if item.menu_item %}
+            <span><strong> {{ item.menu_item.name }}</strong> x {{ item.quantity }} – {{ item.total_item_price }} EUR.</span>
+            <span>Nutrition: Calories: {{ item.item_total_nutrition.calories }},
+                Protein: {{ item.item_total_nutrition.protein }}g,
+                Fat: {{ item.item_total_nutrition.fat }}g,
+                Carbs: {{ item.item_total_nutrition.carbs }}g</span>
+            {% elif item.custom_burger %}
+                <span><strong>Custom burger: {{ item.custom_burger.name }}</strong> x {{ item.quantity }} – {{ item.total_item_price }} EUR</span>
+                <span>Nutrition: Calories: {{ item.item_total_nutrition.calories }},
+                Protein: {{ item.item_total_nutrition.protein }}g,
+                Fat: {{ item.item_total_nutrition.fat }}g,
+                Carbs: {{ item.item_total_nutrition.carbs }}g</span>
+            {% endif %}
+            <form method="post" style="display:inline;">
+                {% csrf_token %}
+                <input type="hidden" name="remove_item_id" value="{{ item.id }}">
+                <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+            </form>
+        </li>
+    {% empty %}
+        <li class="list-group-item">Your order is empty.</li>
+    {% endfor %}
+</ul>
+
+<div class="d-flex justify-content-between mb-3">
+   <p><strong>Total:</strong> {{ total_price }} eur</p>
+</div>
+<a href="{% url 'burger_shop:finalize_order' order.id %}" class="btn btn-success">Finalize Order</a>
+</div>
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends 'burger_shop/base.html' %}
+
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="content">
+<div class="card mb-4" style="max-width: 100%;">
+    <div class="row g-0">
+        <div class="col-md-4 d-flex align-items-center justify-content-center" style="padding: 20px;">
+            {% if user.profile.picture_url %}
+                <img src="{{ user.profile.picture_url }}" alt="Profile Picture" class="rounded-circle"
+                     style="object-fit: cover; height: 100%; max-height: 200px; width: auto;">
+            {% else %}
+                <img src="https://via.placeholder.com/300" alt="Default Profile Picture" class="rounded-circle"
+                     style="object-fit: cover; max-height: 200px; width: auto;">
+            {% endif %}
+        </div>
+        <div class="col-md-8">
+            <div class="card-body">
+                <h2 class="card-title">{{ user.username }}'s Profile</h2>
+                <h5>Email: {{ user.email }}</h5>
+                <h5>Phone: {{ user.profile.phone|default:"Not provided" }}</h5>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card mb-4" style="max-width: 100%; padding: 30px;">
+    <h4>Update Profile:</h4>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ u_form|crispy }}
+        {{ p_form|crispy }}
+        <input type="submit" class="btn btn-outline-success mt-3" value="Update">
+    </form>
+</div>
+</div>
+{% endblock %}

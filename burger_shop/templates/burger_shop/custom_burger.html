@@ -1,0 +1,165 @@
+{% extends 'burger_shop/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="card mb-4 shadow" style="max-width: 100%;">
+    <div class="row g-0">
+        <div class="col-md-4 d-flex align-items-stretch justify-content-center" style="padding-top:20px">
+            {% if burger.image %}
+                <img src="{{ burger.image.url }}" style="object-fit: contain; height: 100%; max-height: 500px; width: auto;" >
+            {% else %}
+                <img class="card-img-top" src="{% static 'img/no-image.png' %}" style="object-fit: contain; max-width: 250px" >
+            {% endif %}
+        </div>
+        <div class="col-md-8">
+                <div class="card-body">
+                    <h1 class="card-title">{{ burger.name }}</h1>
+                    <h4 class="card-text">{{ burger.total_price}}eur</h4>
+                    <h4>Rating:</h4>
+                    <span class="review-stars">
+                                {% if burger.average_rating %}
+                                {% for _ in burger.average_rating %}
+                                    ⭐
+                                {% endfor %}
+                                {% else %}
+                                No rating yet
+                                {% endif %}
+                            </span>
+                    <h4>Recepie:</h4>
+                    {% for item in recipe_items %}
+                        <p>{{ item.ingredient }} x {{ item.quantity }}, <strong>Total:</strong> {{ item.price }}eur</p>
+                    {% endfor %}
+                </div>
+        </div>
+    </div>
+</div>
+
+<div class="card mb-4 shadow" style="max-width: 1500px; padding:30px">
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>Ingredient</th>
+                    <th>Quantity</th>
+                    <th>Calories</th>
+                    <th>Protein (g)</th>
+                    <th>Fat (g)</th>
+                    <th>Carbs (g)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in recipe_items %}
+                <tr>
+                    <td>{{ item.ingredient.name }}</td>
+                    <td>x{{ item.quantity }}</td>
+                    <td>{{ item.total_nutrition.calories|floatformat:0 }}</td>
+                    <td>{{ item.total_nutrition.protein|floatformat:2 }}</td>
+                    <td>{{ item.total_nutrition.fat|floatformat:2 }}</td>
+                    <td>{{ item.total_nutrition.carbs|floatformat:2 }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th scope="row" colspan="2"><strong>Total Burger Nutrition:</strong></th>
+                    <td><strong>{{ burger.total_nutrition.calories|floatformat:0 }}</strong></td>
+                    <td><strong>{{ burger.total_nutrition.protein|floatformat:2 }}</strong></td>
+                    <td><strong>{{ burger.total_nutrition.fat|floatformat:2 }}</strong></td>
+                    <td><strong>{{ burger.total_nutrition.carbs|floatformat:2 }}</strong></td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+
+<div class="card mb-4 shadow" style="max-width: 1500px; padding:30px">
+<h4>Reviews:</h4>
+    {% for review in reviews %}
+        <small><b>{{ review.user }}</b> <em>{{ review.date }}</em></small>
+        <p class="bg-light">{{ review.content }}</p>
+        <p>
+            Rating:
+            <span class="review-stars">
+                {% for _ in review.rating|default:0|rjust:review.rating %}
+                    ⭐
+                {% endfor %}
+            </span>
+        </p>
+        <hr/>
+    {% endfor %}
+    {% if not reviews.first %}
+        <p>No reviews yet</p>
+        <hr/>
+    {% endif %}
+    <div>
+        {% if user.is_authenticated %}
+            {% if form %}
+                <h5>Write a review:</h5>
+                <form method="post">
+                    {% csrf_token %}
+                    <div>
+                        {{ form.content }}
+                    </div>
+                    <h5>Rate it:</h5>
+                    <div class="rating">
+                        {% for value in "12345" %}
+                            <input type="radio" class="star-radio" name="rating" id="rating{{ value }}" value="{{ value }}">
+                            <label for="rating{{ value }}" class="star" data-value="{{ value }}"></label>
+                        {% endfor %}
+                    </div>
+                    <div>
+                        <input type="submit" class="btn btn-outline-success btn-sm" value="Submit"/>
+                    </div>
+                </form>
+            {% else %}
+                <h3>you already left a review, thank you <3</h3>
+            {% endif %}
+        {% else %}
+            <p class="text-danger">Please login to leave a review</p>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const stars = document.querySelectorAll(".star");
+    const radios = document.querySelectorAll(".star-radio");
+
+    stars.forEach(star => {
+        star.addEventListener("mouseenter", function () {
+            let value = this.getAttribute("data-value");
+            highlightStars(value);
+        });
+
+        star.addEventListener("click", function () {
+            let value = this.getAttribute("data-value");
+            document.getElementById(`rating${value}`).checked = true;
+            resetStars();  // Keep selection visible
+        });
+
+        star.addEventListener("mouseleave", function () {
+            resetStars();
+        });
+    });
+
+    function highlightStars(value) {
+        stars.forEach(star => {
+            if (star.getAttribute("data-value") <= value) {
+                star.style.color = "gold";
+            } else {
+                star.style.color = "#ccc";
+            }
+        });
+    }
+
+    function resetStars() {
+        let checkedValue = document.querySelector(".star-radio:checked")?.value || 0;
+        highlightStars(checkedValue);
+    }
+
+    resetStars(); // Ensure correct state on page load
+});
+
+</script>
+{% endblock %}

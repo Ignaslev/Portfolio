@@ -1,0 +1,82 @@
+{% extends 'burger_shop/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="content">
+    <h1>Menu</h1>
+    <h4>Burgers:</h4>
+    <div class="row">
+        {% for burger in burgers %}
+            <div class="col-sm-6 col-md-3 d-flex align-items-stretch">
+                <div class="card mb-4 shadow">
+                    {% if burger.image %}
+                        <img class="card-img-top" src="{{ burger.image.url }}" style="object-fit: contain;">
+                    {% else %}
+                        <img class="card-img-top" src="{% static 'img/no-image.png' %}">
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ burger.name }}</h5>
+                        <p class="card-text"><strong>Price:</strong> {{ burger.price }}eur</p>
+                        <p class="card-text"><strong>Nutrition:</strong></p>
+                        <p class="card-text">Calories: {{ burger.nutrition.calories }}</p>
+                        <p class="card-text">Protein: {{ burger.nutrition.protein }}</p>
+                        <p class="card-text">Fats: {{ burger.nutrition.fat }}</p>
+                        <p class="card-text">Carbs: {{ burger.nutrition.carbs }}</p>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <h4>Sides:</h4>
+    <div class="row">
+        {% for side in sides %}
+            <div class="col-sm-6 col-md-3 d-flex align-items-stretch">
+                <div class="card mb-4 shadow">
+                    {% if side.image %}
+                        <img class="card-img-top" src="{{ side.image.url }}" style="object-fit: contain;">
+                    {% else %}
+                        <img class="card-img-top" src="{% static 'img/no-image.png' %}">
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ side.name }}</h5>
+                        <p class="card-text"><strong>Price:</strong> {{ side.price }}eur</p>
+                        <p class="card-text"><strong>Nutrition:</strong></p>
+                        <p class="card-text">Calories: {{ side.nutrition.calories }}</p>
+                        <p class="card-text">Protein: {{ side.nutrition.protein }}</p>
+                        <p class="card-text">Fats: {{ side.nutrition.fat }}</p>
+                        <p class="card-text">Carbs: {{ side.nutrition.carbs }}</p>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <h4>Drinks:</h4>
+    <div class="row">
+        {% for drink in drinks %}
+            <div class="col-sm-6 col-md-3 d-flex align-items-stretch">
+                <div class="card mb-4 shadow">
+                    {% if drink.image %}
+                        <img class="card-img-top" src="{{ drink.image.url }}" style="object-fit: contain;">
+                    {% else %}
+                        <img class="card-img-top" src="{% static 'img/no-image.png' %}">
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ drink.name }}</h5>
+                        <p class="card-text"><strong>Price:</strong> {{ drink.price }}eur</p>
+                        <p class="card-text"><strong>Nutrition:</strong></p>
+                        <p class="card-text">Calories: {{ drink.nutrition.calories }}</p>
+                        <p class="card-text">Protein: {{ drink.nutrition.protein }}</p>
+                        <p class="card-text">Fats: {{ drink.nutrition.fat }}</p>
+                        <p class="card-text">Carbs: {{ drink.nutrition.carbs }}</p>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="d-flex justify-content-center mt-4">
+        <a href="{% url 'burger_shop:start_order' %}" class="btn btn-success btn-lg">Start Your Order</a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends 'burger_shop/base.html' %}
+
+{% block content %}
+<div class="content">
+<h4>{{ user.username }} orders:</h4>
+<ul class="list-group">
+    {% for order in orders %}
+    {% if order.orderitem_set.exists %}
+        <li class="list-group-item d-flex justify-content-between align-items-center" style="margin-top: 10px">
+            <span><strong>{{ order.time|date:"m-d H:i" }}</strong>
+            {% for item in order.orderitem_set.all %}
+                    {% if item.menu_item %}
+                        {{ item.menu_item.name }} x{{ item.quantity }}{% if not forloop.last %}, {% endif %}
+                    {% elif item.custom_burger %}
+                        {{ item.custom_burger.name }} x{{ item.quantity }}{% if not forloop.last %}, {% endif %}
+                    {% endif %}
+
+                {% empty %}
+                    No items in this order.
+
+                {% endfor %}
+            </span>
+            <span>
+                {{ order.total_price }}eur, <strong>status:</strong>
+                <span class="{% if order.order_status == 'co' %} text-success
+                                  {% elif order.order_status == 'ca' %} text-danger
+                                  {% elif order.order_status == 'f' %} text-primary
+                                  {% else %} text-info
+                                  {% endif %}">{{ order.get_order_status_display }}</span>
+                {% if order.order_status == 'd' and order.orderitem_set.exists %}
+                    <a href="{% url 'burger_shop:order_detail' order.id %}" class="btn btn-primary btn-sm">Continue Order</a>
+                {% endif %}
+            </span>
+        </li>
+    {% endif %}
+    {% empty %}
+        <li class="list-group-item">Your order is empty.</li>
+    {% endfor %}
+    {% if orders.has_other_pages %}
+    <ul class="pagination pagination-sm justify-content-center mt-4">
+        {% for nr in orders.paginator.page_range %}
+            {% if orders.number == nr %}
+                <li class="page-item active">
+                    <a class="page-link">{{ nr }}</a>
+                </li>
+            {% else %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ nr }}">{{ nr }}</a>
+                </li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+    {% endif %}
+</ul>
+</div>
+{% endblock %}

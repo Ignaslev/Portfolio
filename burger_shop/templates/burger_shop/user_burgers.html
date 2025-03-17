@@ -1,0 +1,68 @@
+{% extends 'burger_shop/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="content">
+
+
+    {% if burgers %}
+    <h4 style="margin-bottom:30px;">{{ user.username }} burgers:</h4>
+    <div class="mb-3">
+        <a href="?sort=date" class="btn btn-outline-primary {% if sort_by == 'date' %}active{% endif %}">Sort by Date</a>
+        <a href="?sort=rating" class="btn btn-outline-primary {% if sort_by == 'rating' %}active{% endif %}">Sort by Rating</a>
+    </div>
+    <div class="row">
+        {% for burger in burgers %}
+            <div class="col-sm-6 col-md-3 d-flex align-items-stretch">
+                <div class="card mb-4 shadow">
+                    {% if burger.image %}
+                        <img class="card-img-top" src="{{ burger.image.url }}" style="object-fit: contain;">
+                    {% else %}
+                        <img class="card-img-top" src="{% static 'img/no-image.png' %}">
+                    {% endif %}
+                    <div class="card-body">
+                        <a href="{% url 'burger_shop:user_burger' burger.id %}"><h5 class="card-title">{{ burger.name }}</h5></a>
+                        <p>Rating: <span class="review-stars">
+                            {% if burger.average_rating %}
+                                {% for _ in burger.average_rating %}
+                                 ⭐
+                                {% endfor %}
+                            {% else %}
+                            No rating yet
+                            {% endif %}
+                        </span></p>
+                        <p class="card-text"><strong>Price:</strong> {{ burger.total_price }}eur</p>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+
+    {% else %}
+    <div class="text-center">
+        <h3 class="me-3">You dont have any customs burgers yet</h3>
+        <div>
+            <a href="{% url 'burger_shop:create_burger' %}" class="btn btn-primary" style="margin: 15px">Create burger!</a>
+        </div>
+    </div>
+    {% endif %}
+
+</div>
+    {% if burgers.has_other_pages %}
+        <ul class="pagination pagination-sm justify-content-center mt-4">
+        {% for nr in burgers.paginator.page_range %}
+            {% if burgers.number == nr %}
+                <li class="page-item active">
+                    <a class="page-link">{{ nr }}</a>
+                </li>
+            {% else %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ nr }}&sort={{ sort_by }}">{{ nr }}</a>
+                </li>
+            {% endif %}
+        {% endfor %}
+        </ul>
+        {% endif %}
+</div>
+
+
+{% endblock %}

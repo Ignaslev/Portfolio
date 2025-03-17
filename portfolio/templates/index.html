@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ignas Levinskas</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'portfolio/css/main.css' %}">
+</head>
+<body>
+    <div class="header-wrapper">
+        <header class="header">
+            <div class="header-left">
+                <div class="header-img-container">
+                    <img src="{% static 'portfolio/images/foto.jpg' %}" class="header-img">
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="header-info roboto">
+                    <h2 class="header-name roboto">Ignas Levinskas</h2>
+                    <p class="header-title roboto">Junior developer</p>
+                    <p class="header-contact">
+                        <img src="{% static 'portfolio/images/mail.png' %}" style="height:10px; padding-right:5px;">
+                        <a href="mailto:levinskas.ignas@gmail.com" class="contact-link roboto">levinskas.ignas@gmail.com</a>
+                    </p>
+                    <p><img src="{% static 'portfolio/images/location.png' %}" style="height:15px; padding-right:5px;">Silute, Lithuania</p>
+                    <div class="header-socials roboto">
+                        <a href="https://www.instagram.com/coreymschafer/" target="_blank" class="social-link">
+                            <img src="{% static 'portfolio/images/linkedin.png' %}" style="height:15px;">
+                            Linkedin
+                        </a>
+                        <span class="social-separator">|</span>
+                        <a href="https://github.com/CoreyMSchafer" target="_blank" class="social-link">
+                            <img src="{% static 'portfolio/images/github.png' %}" style="height:15px;">
+                            GitHub
+                        </a>
+                    </div>
+                    <p class="header-bio"></p>
+                </div>
+            </div>
+        </header>
+    </div>
+
+<div class="container">
+
+    <div class="">
+        <h1 class="info-title roboto">About me</h1>
+        <p class="roboto">Heres going to be written some about me</p>
+        <h4 class="roboto">Languages:</h4>
+        <ul style="list-style-type: none; padding-left: 20px;">
+            <li class="roboto" style="margin-bottom: 10px;">🇱🇹 Lithuanian (Native)</li>
+            <li class="roboto">🇬🇧 English (Fluent) </li>
+        </ul>
+
+        <div class="skills">
+            <h4 class="roboto">Skills</h4>
+
+            <p><b>Graphic design:</b></p>
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4">
+
+                <div class="col mb-4">
+                    <div class="card h-100 shadow-sm">
+                        <img src="{% static 'portfolio/images/photoshop.png' %}" class="card-img-top p-3" alt="Photoshop" style="max-height: 150px; object-fit: contain;">
+                        <div class="card-body text-center">
+                            <h5 class="card-title roboto mb-0">Photoshop</h5>
+                            <p class="card-text roboto"><small class="text-muted">Fluent</small></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col mb-4">
+                    <div class="card h-100 shadow-sm">
+                        <img src="{% static 'portfolio/images/illustrator.png' %}" class="card-img-top p-3" alt="Illustrator" style="max-height: 150px; object-fit: contain;">
+                        <div class="card-body text-center">
+                            <h5 class="card-title roboto mb-0">Illustrator</h5>
+                            <p class="card-text roboto"><small class="text-muted">Intermediate</small></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col mb-4">
+                    <div class="card h-100 shadow-sm">
+                        <img src="{% static 'portfolio/images/aftereffects.png' %}" class="card-img-top p-3" alt="After Effects" style="max-height: 150px; object-fit: contain;">
+                        <div class="card-body text-center">
+                            <h5 class="card-title roboto mb-0">After Effects</h5>
+                            <p class="card-text roboto"><small class="text-muted">Intermediate</small></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col mb-4">
+                    <div class="card h-100 shadow-sm">
+                        <img src="{% static 'portfolio/images/cinema4d.png' %}" class="card-img-top p-3" alt="Cinema4D" style="max-height: 150px; object-fit: contain;">
+                        <div class="card-body text-center">
+                            <h5 class="card-title roboto mb-0">Cinema4D</h5>
+                            <p class="card-text roboto"><small class="text-muted">Intermediate</small></p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <p><b>Programming:</b></p>
+
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4">
+
+                <div class="col mb-4">
+                    <div class="card h-100 shadow-sm">
+                        <img src="{% static 'portfolio/images/python.png' %}" class="card-img-top p-3" alt="Python" style="max-height: 150px; object-fit: contain;">
+                        <div class="card-body text-center">
+                            <h5 class="card-title roboto mb-0">Python</h5>
+                            <p class="card-text roboto"><small class="text-muted">Fluent</small></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col mb-4">
+                    <div class="card h-100 shadow-sm">
+                        <img src="{% static 'portfolio/images/sql.png' %}" class="card-img-top p-3" alt="SQL" style="max-height: 150px; object-fit: contain;">
+                        <div class="card-body text-center">
+                            <h5 class="card-title roboto mb-0">SQL</h5>
+                            <p class="card-text roboto"><small class="text-muted">Fluent</small></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col mb-4">
+                    <div class="card h-100 shadow-sm">
+                        <img src="{% static 'portfolio/images/django.png' %}" class="card-img-top p-3" alt="Django" style="max-height: 150px; object-fit: contain;">
+                        <div class="card-body text-center">
+                            <h5 class="card-title roboto mb-0">Django</h5>
+                            <p class="card-text roboto"><small class="text-muted">Fluent</small></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col mb-4">
+                    <div class="card h-100 shadow-sm">
+                        <img src="{% static 'portfolio/images/git.png' %}" class="card-img-top p-3" alt="Git" style="max-height: 150px; object-fit: contain;">
+                        <div class="card-body text-center">
+                            <h5 class="card-title roboto mb-0">Git</h5>
+                            <p class="card-text roboto"><small class="text-muted">Fluent</small></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col mb-4">
+                    <div class="card h-100 shadow-sm">
+                        <img src="{% static 'portfolio/images/htmlcss.png' %}" class="card-img-top p-3" alt="HTML & CSS" style="max-height: 150px; object-fit: contain;">
+                        <div class="card-body text-center">
+                            <h5 class="card-title roboto mb-0">HTML & CSS</h5>
+                            <p class="card-text roboto"><small class="text-muted">Fluent</small></p>
+                        </div>
+                    </div>
+                </div>
+
+
+        </div>
+
+    </div>
+
+    <div class="">
+        <h1 class="info-title roboto">Education</h1>
+        <div class="experience-item">
+            <h4 class="roboto">Institution Name</h4>
+            <p class="experience-details roboto">Degree/Certificate, Field of Study</p>
+            <p class="experience-details roboto">Start Date - End Date</p>
+            <ul class="roboto">
+                <li>Relevant Coursework or Specialization</li>
+                <li>Minor or Thesis Topic</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="">
+        <h1 class="info-title roboto">Work experience</h1>
+        <div class="experience-item">
+            <h4 class="roboto">Company Name</h4>
+            <p class="experience-details roboto">Job Title</p>
+            <p class="experience-details roboto">Start Date - End Date</p>
+            <ul class="roboto">
+                <li>Key Responsibility or Project</li>
+                <li>Achievement or Contribution</li>
+            </ul>
+        </div>
+    </div>
+
+    <h1 class="info-title roboto">Projects</h1>
+    <div class="container mt-5">
+        <div class="">
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <div class="card">
+                        <img src="{% static 'portfolio/images/burger-shop.png' %}" class="card-img-top" alt="Burger Shop Project" style="padding: 15px;">
+                        <div class="card-body">
+                            <h4 class="card-title roboto">Burger Shop</h4>
+                            <p class="card-text roboto">Short description of your Burger Shop project. Highlight key features and technologies used.</p>
+                            <a href="{% url 'burger_shop:homepage' %}" class="btn btn-primary">View Project</a>
+                        </div>
+                    </div>
+                </div>
+
+                {% comment %}
+                <div class="col-md-6 mb-4">
+                    <div class="card">
+                        <img src="{% static 'portfolio/images/another-project.png' %}" class="card-img-top" alt="Another Project">
+                        <div class="card-body">
+                            <h4 class="card-title roboto">Another Project Title</h4>
+                            <p class="card-text roboto">Brief description of this other project.</p>
+                            <a href="#" class="btn btn-primary">View Project</a>
+                        </div>
+                    </div>
+                </div>
+                {% endcomment %}
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

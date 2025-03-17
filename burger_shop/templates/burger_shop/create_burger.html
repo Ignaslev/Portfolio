@@ -1,0 +1,403 @@
+{% extends 'burger_shop/base.html' %}
+
+{% block content %}
+<div class="content">
+    {% if user.is_authenticated %}
+        <h4>Create Your Custom Burger</h4>
+        <form method="post" id="burgerForm">
+            {% csrf_token %}
+            <p>{{ form.name.label }}: {{ form.name }}</p>
+            <h5>Choose Your Bun:</h5>
+            <div class="row">
+                {% for bun in buns %}
+                    <div class="col-sm-6 col-md-3 d-flex align-items-stretch">
+                        <div class="card m-2 shadow p-2 w-100 d-flex flex-column justify-content-between" style="width: 150px; text-align: center;">
+                            <img class="card-img-top" src="{{ bun.part_image.url }}" style="object-fit: contain;">
+                            <div class="card-body d-flex flex-column align-items-center">
+                                <div>
+                                    <p class="card-title" style="height: 40px; display: flex; align-items: center; justify-content: center;"><b>{{ bun.name }}</b></p>
+                                    <p class="mb-2">{{ bun.price }}eur</p>
+                                    <p style="margin-bottom: 0.1rem;"><small><b>Nutrition</b></small></p>
+                                        <p style="margin-bottom: 0.1rem;"><small>-Calories: {{bun.nutrition.calories}}</small></p>
+                                        <p style="margin-bottom: 0.1rem;"><small>-Protein: {{bun.nutrition.protein}}</small></p>
+                                        <p style="margin-bottom: 0.1rem;"><small>-Fat: {{bun.nutrition.fat}}</small></p>
+                                        <p><small>-Carbs: {{bun.nutrition.carbs}}</small></p>
+                                </div>
+                                <div>
+                                    <input type="radio" name="bun" value="{{ bun.id }}" class="select-bun" data-name="{{ bun.name }}" data-price="{{ bun.price }}"
+                                    data-calories="{{ bun.nutrition.calories }}" data-protein="{{ bun.nutrition.protein }}" data-fat="{{ bun.nutrition.fat }}" data-carbs="{{ bun.nutrition.carbs }}"> <strong>Select</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <h3>Select Ingredients:</h3>
+            <h4>Patties:</h4>
+            <div class="row">
+                    {% for ingredient in categorized_ingredients.patty %}
+                        <div class="col-md-3 d-flex">
+                            <div class="card m-2 shadow p-2 w-100 d-flex flex-column justify-content-between" style="width: 150px; text-align: center;">
+                                <img src="{{ ingredient.part_image.url }}" class="card-img-top mx-auto" alt="{{ ingredient.name }}" style="object-fit: contain; max-height: 100px;">
+                                <div class="card-body d-flex flex-column align-items-center">
+                                    <div>
+                                        <p class="mb-1" style="height: 40px; display: flex; align-items: center; justify-content: center;"><b>{{ ingredient.name }}</b></p>
+                                        <p class="mb-2">{{ ingredient.price }}eur</p>
+                                        <p style="margin-bottom: 0.1rem;"><small><b>Nutrition</b></small></p>
+                                            <p style="margin-bottom: 0.1rem;"><small>-Calories: {{ingredient.nutrition.calories}}</small></p>
+                                            <p style="margin-bottom: 0.1rem;"><small>-Protein: {{ingredient.nutrition.protein}}</small></p>
+                                            <p style="margin-bottom: 0.1rem;"><small>-Fat: {{ingredient.nutrition.fat}}</small></p>
+                                            <p><small>-Carbs: {{ingredient.nutrition.carbs}}</small></p>
+                                    </div>
+                                    <input type="number" id="qty_{{ ingredient.id }}" value="1" min="1" max="15" class="form-control mb-2">
+                                    <button type="button" class="btn btn-primary" onclick="addIngredient({{ ingredient.id }}, '{{ ingredient.name }}', {{ ingredient.price }},
+                                    {{ ingredient.nutrition.calories }}, {{ ingredient.nutrition.protein }}, {{ ingredient.nutrition.fat }}, {{ ingredient.nutrition.carbs }})">
+                                        Add</button>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+            </div>
+            <h4>Cheese:</h4>
+            <div class="row">
+                    {% for ingredient in categorized_ingredients.cheese %}
+                        <div class="col-md-3 d-flex">
+                            <div class="card m-2 shadow p-2 w-100 d-flex flex-column justify-content-between" style="width: 150px; text-align: center;">
+                                <img src="{{ ingredient.part_image.url }}" class="card-img-top mx-auto" alt="{{ ingredient.name }}" style="object-fit: contain; max-height: 100px;">
+                                <div class="card-body d-flex flex-column align-items-center">
+                                    <div>
+                                        <p class="mb-1" style="height: 40px; display: flex; align-items: center; justify-content: center;"><b>{{ ingredient.name }}</b></p>
+                                        <p class="mb-2">{{ ingredient.price }}eur</p>
+                                        <p style="margin-bottom: 0.1rem;"><small><b>Nutrition</b></small></p>
+                                            <p style="margin-bottom: 0.1rem;"><small>-Calories: {{ingredient.nutrition.calories}}</small></p>
+                                            <p style="margin-bottom: 0.1rem;"><small>-Protein: {{ingredient.nutrition.protein}}</small></p>
+                                            <p style="margin-bottom: 0.1rem;"><small>-Fat: {{ingredient.nutrition.fat}}</small></p>
+                                            <p><small>-Carbs: {{ingredient.nutrition.carbs}}</small></p>
+                                    </div>
+                                    <input type="number" id="qty_{{ ingredient.id }}" value="1" min="1" max="15" class="form-control mb-2">
+                                    <button type="button" class="btn btn-primary" onclick="addIngredient({{ ingredient.id }}, '{{ ingredient.name }}', {{ ingredient.price }},
+                                    {{ ingredient.nutrition.calories }}, {{ ingredient.nutrition.protein }}, {{ ingredient.nutrition.fat }}, {{ ingredient.nutrition.carbs }})">
+                                        Add</button>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+            </div>
+            <h4>Vegetables:</h4>
+            <div class="row">
+                    {% for ingredient in categorized_ingredients.vegetables %}
+                        <div class="col-md-3 d-flex">
+                            <div class="card m-2 shadow p-2 w-100 d-flex flex-column justify-content-between" style="width: 150px; text-align: center;">
+                                <img src="{{ ingredient.part_image.url }}" class="card-img-top mx-auto" alt="{{ ingredient.name }}" style="object-fit: contain; max-height: 100px;">
+                                <div class="card-body d-flex flex-column align-items-center">
+                                    <div>
+                                        <p class="mb-1" style="height: 40px; display: flex; align-items: center; justify-content: center;"><b>{{ ingredient.name }}</b></p>
+                                        <p class="mb-2">{{ ingredient.price }}eur</p>
+                                        <p style="margin-bottom: 0.1rem;"><small><b>Nutrition</b></small></p>
+                                            <p style="margin-bottom: 0.1rem;"><small>-Calories: {{ingredient.nutrition.calories}}</small></p>
+                                            <p style="margin-bottom: 0.1rem;"><small>-Protein: {{ingredient.nutrition.protein}}</small></p>
+                                            <p style="margin-bottom: 0.1rem;"><small>-Fat: {{ingredient.nutrition.fat}}</small></p>
+                                            <p><small>-Carbs: {{ingredient.nutrition.carbs}}</small></p>
+                                    </div>
+                                    <input type="number" id="qty_{{ ingredient.id }}" value="1" min="1" max="15" class="form-control mb-2">
+                                    <button type="button" class="btn btn-primary" onclick="addIngredient({{ ingredient.id }}, '{{ ingredient.name }}', {{ ingredient.price }},
+                                    {{ ingredient.nutrition.calories }}, {{ ingredient.nutrition.protein }}, {{ ingredient.nutrition.fat }}, {{ ingredient.nutrition.carbs }})">
+                                        Add</button>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+            </div>
+            <h4>Sauce:</h4>
+            <div class="row">
+                    {% for ingredient in categorized_ingredients.sauce %}
+                        <div class="col-md-3 d-flex">
+                            <div class="card m-2 shadow p-2 w-100 d-flex flex-column justify-content-between" style="width: 150px; text-align: center;">
+                                <img src="{{ ingredient.part_image.url }}" class="card-img-top mx-auto" alt="{{ ingredient.name }}" style="object-fit: contain; max-height: 100px;">
+                                <div class="card-body d-flex flex-column align-items-center">
+                                    <div>
+                                        <p class="mb-1" style="height: 40px; display: flex; align-items: center; justify-content: center;"><b>{{ ingredient.name }}</b></p>
+                                        <p class="mb-2">{{ ingredient.price }}eur</p>
+                                        <p style="margin-bottom: 0.1rem;"><small><b>Nutrition</b></small></p>
+                                            <p style="margin-bottom: 0.1rem;"><small>-Calories: {{ingredient.nutrition.calories}}</small></p>
+                                            <p style="margin-bottom: 0.1rem;"><small>-Protein: {{ingredient.nutrition.protein}}</small></p>
+                                            <p style="margin-bottom: 0.1rem;"><small>-Fat: {{ingredient.nutrition.fat}}</small></p>
+                                            <p><small>-Carbs: {{ingredient.nutrition.carbs}}</small></p>
+                                    </div>
+                                    <input type="number" id="qty_{{ ingredient.id }}" value="1" min="1" max="15" class="form-control mb-2">
+                                    <button type="button" class="btn btn-primary" onclick="addIngredient({{ ingredient.id }}, '{{ ingredient.name }}', {{ ingredient.price }},
+                                    {{ ingredient.nutrition.calories }}, {{ ingredient.nutrition.protein }}, {{ ingredient.nutrition.fat }}, {{ ingredient.nutrition.carbs }})">
+                                        Add</button>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+            </div>
+            <h4>Extras:</h4>
+            <div class="row">
+                    {% for ingredient in categorized_ingredients.extras %}
+                        <div class="col-md-3 d-flex">
+                            <div class="card m-2 shadow p-2 w-100 d-flex flex-column justify-content-between" style="width: 150px; text-align: center;">
+                                <img src="{{ ingredient.part_image.url }}" class="card-img-top mx-auto" alt="{{ ingredient.name }}" style="object-fit: contain; max-height: 100px;">
+                                <div class="card-body d-flex flex-column align-items-center">
+                                    <div>
+                                        <p class="mb-1" style="height: 40px; display: flex; align-items: center; justify-content: center;"><b>{{ ingredient.name }}</b></p>
+                                        <p class="mb-2">{{ ingredient.price }}eur</p>
+                                        <p style="margin-bottom: 0.1rem;"><small><b>Nutrition</b></small></p>
+                                            <p style="margin-bottom: 0.1rem;"><small>-Calories: {{ingredient.nutrition.calories}}</small></p>
+                                            <p style="margin-bottom: 0.1rem;"><small>-Protein: {{ingredient.nutrition.protein}}</small></p>
+                                            <p style="margin-bottom: 0.1rem;"><small>-Fat: {{ingredient.nutrition.fat}}</small></p>
+                                            <p><small>-Carbs: {{ingredient.nutrition.carbs}}</small></p>
+                                    </div>
+                                    <input type="number" id="qty_{{ ingredient.id }}" value="1" min="1" max="15" class="form-control mb-2">
+                                    <button type="button" class="btn btn-primary" onclick="addIngredient({{ ingredient.id }}, '{{ ingredient.name }}', {{ ingredient.price }},
+                                    {{ ingredient.nutrition.calories }}, {{ ingredient.nutrition.protein }}, {{ ingredient.nutrition.fat }}, {{ ingredient.nutrition.carbs }})">
+                                        Add</button>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+            </div>
+
+            <h5>Added Ingredients:</h5>
+            <ul id="selectedIngredients" class="list-group mb-3"></ul>
+            <p id="totalPrice"><strong>Total Price: 0.00eur</strong></p>
+            <div id="totalNutrition"></div>
+            <input type="hidden" name="bun_id" id="bunIdInput">
+            <input type="hidden" name="ingredients" id="ingredientsInput">
+            <button type="submit" class="btn btn-success" style="margin-top: 20px;">Submit Burger</button>
+        </form>
+
+    {% else %}
+        <div class="text-center">
+            <h3 class="me-3">Sorry, only registered and loged in users can create custom burgers</h3>
+        <div>
+            <a href="{% url 'login' %}" class="btn btn-primary" style="margin: 15px">Log In</a>
+            <a href="{% url 'burger_shop:register' %}" class="btn btn-primary" style="margin: 15px">Register</a>
+        </div>
+        </div>
+    {% endif %}
+</div>
+<script>
+    let selectedIngredients = {};
+    let selectedBun = null;
+
+    document.addEventListener('DOMContentLoaded', function () {
+        let bunRadios = document.querySelectorAll('.select-bun');
+        bunRadios.forEach(radio => {
+            radio.addEventListener('change', function () {
+                selectedBun = {
+                    id: this.value,
+                    name: this.closest('.card').querySelector('.card-title').innerText,
+                    price: parseFloat(this.dataset.price) || 0,
+                    nutrition: {
+                        calories: parseFloat(this.dataset.calories) || 0,
+                        protein: parseFloat(this.dataset.protein) || 0,
+                        fat: parseFloat(this.dataset.fat) || 0,
+                        carbs: parseFloat(this.dataset.carbs) || 0
+                    }
+                };
+
+
+
+                document.getElementById('bunIdInput').value = this.value;
+                updatePreview();
+            });
+        });
+
+
+     // Prevent form submission if no bun is selected
+        document.getElementById('burgerForm').addEventListener('submit', function (event) {
+            if (!selectedBun) {
+                event.preventDefault(); // Stop form submission
+                alert('Please select a bun before submitting!');
+            }
+
+        const totalIngredients = Object.values(selectedIngredients).reduce((sum, ingredient) => sum + ingredient.quantity, 0);
+            if (totalIngredients === 0) {
+            event.preventDefault(); // Stop form submission
+            alert('Please add at least one ingredient!');
+            return;
+            }
+
+    if (totalIngredients > 15) {
+        event.preventDefault(); // Stop form submission
+        alert('You can select a maximum of 15 ingredients!');
+        }
+        });
+    });
+
+    function addIngredient(id, name, price, calories, protein, fat, carbs, isBun = false) {
+        price = parseFloat(price);  // Ensure price is a number
+        if (isNaN(price)) return;  // Prevent adding invalid prices
+
+        let qtyInput = document.getElementById(`qty_${id}`);
+        let quantity = parseInt(qtyInput.value) || 1;
+
+        // Calculate current total ingredients
+        const currentTotal = Object.values(selectedIngredients).reduce((sum, item) => sum + item.quantity, 0);
+
+        // Enforce maximum ingredient limit
+        if (currentTotal + quantity > 15) {
+            alert('You can select a maximum of 15 ingredients!');
+            return;
+            }
+
+        if (selectedIngredients[id]) {
+            selectedIngredients[id].quantity += quantity;
+        } else {
+            selectedIngredients[id] = { name: name,
+                                        price: price,
+                                        quantity: quantity,
+                                        nutrition: {
+                                            calories: calories,
+                                            protein: protein,
+                                            fat: fat,
+                                            carbs: carbs},
+                                        isBun: isBun,
+                                        quantity: parseInt(document.getElementById(`qty_${id}`).value) || 1
+            };
+        }
+        updatePreview();
+    }
+
+    function removeIngredient(id) {
+        if (selectedIngredients[id]) {
+            delete selectedIngredients[id];
+        }
+        updatePreview();
+    }
+
+    function updateQuantity(ingredientId) {
+        const quantityInput = document.getElementById(`quantity_${ingredientId}`);
+        if (!quantityInput) {
+            console.error(`Quantity input for ingredient ID ${ingredientId} not found`);
+            return; // Exit if input not found
+        }
+
+        const newQuantity = parseInt(quantityInput.value);
+
+        if (newQuantity >= 1) {
+            // Calculate current total ingredients excluding the current one being updated
+            let currentTotal = 0;
+            for (let id in selectedIngredients) {
+                if (id !== ingredientId) { // Don't count current ingredient yet
+                    currentTotal += selectedIngredients[id].quantity;
+                }
+            }
+            // Check against total limit including the new quantity
+            if (currentTotal + newQuantity <= 15) {
+                selectedIngredients[ingredientId].quantity = newQuantity;
+                console.log("selectedIngredients after quantity update:", selectedIngredients); // ADDED
+                updatePreview(); // Update the preview after modifying the quantity
+                console.log("updatePreview called"); // ADDED
+            } else {
+                alert('You can select a maximum of 15 ingredients!');
+                quantityInput.value = selectedIngredients[ingredientId].quantity; // Revert input to previous valid quantity
+            }
+
+        } else {
+            alert('Quantity must be at least 1');
+            quantityInput.value = selectedIngredients[ingredientId].quantity; // Revert input to previous valid quantity
+        }
+    }
+
+    function updatePreview() {
+        let previewList = document.getElementById('selectedIngredients');
+        let ingredientsInput = document.getElementById('ingredientsInput');
+        let totalPriceDisplay = document.getElementById('totalPrice');
+        let totalNutritionDisplay = document.getElementById('totalNutrition');
+
+        previewList.innerHTML = ''; // Clear list before re-rendering
+        let ingredientData = [];
+        let totalPrice = 0;
+
+        let burgertotalCalories = 0;
+        let burgertotalCarbs = 0;
+        let burgertotalFat = 0;
+        let burgertotalProtein = 0;
+
+        // Add selected bun to preview
+        if (selectedBun) {
+            let bunTotal = selectedBun.price;
+            totalPrice += bunTotal;
+
+            let bunCalories = selectedBun.nutrition.calories;
+            let bunCarbs = selectedBun.nutrition.carbs;
+            let bunFat = selectedBun.nutrition.fat;
+            let bunProtein = selectedBun.nutrition.protein;
+
+            burgertotalCalories += bunCalories;
+            burgertotalCarbs += bunCarbs;
+            burgertotalFat += bunFat;
+            burgertotalProtein += bunProtein;
+
+            let bunItem = document.createElement('li');
+            bunItem.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-center');
+            bunItem.innerHTML = `<strong>${selectedBun.name} (Bun) - ${selectedBun.price.toFixed(2)}eur</strong>,
+            <small>Calories: ${bunCalories.toFixed(2)} kcal, Carbs: ${bunCarbs.toFixed(2)}g, Fat: ${bunFat.toFixed(2)}g, Protein: ${bunProtein.toFixed(2)}g</small>`;
+            previewList.appendChild(bunItem);
+        }
+
+        // Add selected ingredients to preview
+        for (let id in selectedIngredients) {
+            let ingredient = selectedIngredients[id];
+            let totalIngredientPrice = ingredient.price * ingredient.quantity;
+            totalPrice += totalIngredientPrice;
+
+            // Get nutrition values
+            let totalCalories = ingredient.nutrition.calories * ingredient.quantity;
+            let totalCarbs = ingredient.nutrition.carbs * ingredient.quantity;
+            let totalFat = ingredient.nutrition.fat * ingredient.quantity;
+            let totalProtein = ingredient.nutrition.protein * ingredient.quantity;
+
+            burgertotalCalories += ingredient.nutrition.calories * ingredient.quantity;
+            burgertotalCarbs += ingredient.nutrition.carbs * ingredient.quantity;
+            burgertotalFat += ingredient.nutrition.fat * ingredient.quantity;
+            burgertotalProtein += ingredient.nutrition.protein * ingredient.quantity;
+
+
+            let listItem = document.createElement('li');
+            listItem.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-center');
+
+            listItem.innerHTML =`
+            <div class="d-flex justify-content-between align-items-center" style="width: 100%;">
+    <div class="d-flex align-items-center"> <span>
+         <strong>${ingredient.name}</strong>
+        </span>
+        <input type="number" class="form-control form-control-sm quantity-input" id="quantity_${id}" value="${ingredient.quantity}" min="1" style="width: 50px; margin-left: 10px; margin-right: 5px;" onchange="updateQuantity('${id}')">
+        <span>
+         <small>x ${ingredient.price.toFixed(2)}eur = <strong>${totalIngredientPrice.toFixed(2)}eur</strong></small>
+        </span>
+    </div>
+    <div class="text-center" style="min-width: 250px;"> <small>Calories: ${totalCalories.toFixed(2)} kcal, Carbs: ${totalCarbs.toFixed(2)}g, Fat: ${totalFat.toFixed(2)}g, Protein: ${totalProtein.toFixed(2)}g</small>
+    </div>
+    <div> <button class="btn btn-danger btn-sm" onclick="removeIngredient(${id})">Remove</button>
+    </div>
+ </div>`;
+
+            previewList.appendChild(listItem);
+
+            for (let i = 0; i < ingredient.quantity; i++) {
+                ingredientData.push(id);
+            }
+        }
+
+        // Update hidden input and total price
+        ingredientsInput.value = ingredientData.join(',');
+        totalPriceDisplay.innerHTML = `<strong>Total Price: ${totalPrice.toFixed(2)}eur</strong>`;
+
+        // Display total nutrition
+        totalNutritionDisplay.innerHTML = `<strong>Total burger nutrition:</strong>
+            <br>Calories: ${burgertotalCalories.toFixed(2)} kcal
+            <br>Carbs: ${burgertotalCarbs.toFixed(2)}g
+            <br>Fat: ${burgertotalFat.toFixed(2)}g
+            <br>Protein: ${burgertotalProtein.toFixed(2)}g`;
+    }
+
+
+</script>
+
+
+{% endblock %}

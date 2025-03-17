@@ -1,0 +1,14 @@
+{% extends 'burger_shop/base.html' %}
+
+{% block content %}
+<div class="content">
+<div class="text-center">
+        <h3 class="me-3">Sorry, only registered and loged in ussers can place orders!</h3>
+        <div>
+            <a href="{% url 'login' %}" class="btn btn-primary" style="margin: 15px">Log In</a>
+            <a href="{% url 'burger_shop:register' %}" class="btn btn-primary" style="margin: 15px">Register</a>
+        </div>
+</div>
+</div>
+
+{% endblock %}
