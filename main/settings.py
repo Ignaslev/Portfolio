@@ -142,8 +142,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Where Django looks for static files during development
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
-    os.path.join(BASE_DIR, 'portfolio', 'burger_shop', 'static'),  # Include app-specific static
+
 ]
 
 # Default primary key field type
