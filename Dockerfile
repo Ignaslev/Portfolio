@@ -35,7 +35,7 @@ RUN python manage.py migrate --noinput
 
 # Collect static files
 RUN python manage.py collectstatic --noinput
-ls -R /app
+RUN ls -R /app
 
 # Copy Nginx configuration
 COPY nginx.conf /etc/nginx/sites-available/portfolio
