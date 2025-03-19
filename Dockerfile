@@ -37,12 +37,14 @@ RUN python manage.py migrate --noinput
 RUN python manage.py collectstatic --noinput
 
 # Copy Nginx configuration
-COPY nginx.conf /etc/nginx/sites-available/default
+COPY nginx.conf /etc/nginx/sites-available/portfolio
+RUN ln -s /etc/nginx/sites-available/portfolio /etc/nginx/sites-enabled/
 
 # Set up entrypoint to run Gunicorn and Nginx
 COPY entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
 EXPOSE 8000
+EXPOSE 80
 
 CMD ["entrypoint.sh"]
