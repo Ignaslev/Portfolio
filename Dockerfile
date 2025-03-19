@@ -16,6 +16,15 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY requirements.txt .
 RUN pip install -r requirements.txt
 
+COPY . /app/
+
+# Define build arguments
+ARG SECRET_KEY
+ENV SECRET_KEY=$SECRET_KEY
+
+ARG DJANGO_DEBUG
+ENV DJANGO_DEBUG=$DJANGO_DEBUG
+
 # Copy only the settings file first
 COPY main/settings.py /app/portfolio/main/
 
