@@ -1,4 +1,5 @@
-FROM python:3.13.0-slim-buster
+ARG PYTHON_VERSION=3.13-slim-bullseye
+FROM python:${PYTHON_VERSION}
 
 WORKDIR /app
 
