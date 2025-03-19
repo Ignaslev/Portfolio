@@ -19,6 +19,10 @@ RUN pip install -r requirements.txt
 # Copy the project code
 COPY . /app
 
+# Define build argument
+ARG SECRET_KEY
+ENV SECRET_KEY=$SECRET_KEY
+
 # Collect static files
 RUN python manage.py collectstatic --noinput
 
