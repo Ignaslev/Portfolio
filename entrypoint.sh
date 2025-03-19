@@ -1,13 +1,7 @@
 #!/bin/bash
 
+# Apply migrations
+python manage.py migrate --noinput
+
 # Start Gunicorn
-gunicorn --bind 0.0.0.0:8000 main.wsgi:application &
-
-# Wait for Gunicorn to be ready before starting Nginx
-sleep 5
-
-# Start Nginx
-nginx -g 'daemon off;'
-
-# Keep the script running so the container doesn't exit
-wait
+gunicorn --bind 0.0.0.0:8000 your_project.wsgi
