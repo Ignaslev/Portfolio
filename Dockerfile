@@ -5,7 +5,7 @@ WORKDIR /app
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
-ENV DJANGO_SETTINGS_MODULE portfolio.main.settings
+ENV DJANGO_SETTINGS_MODULE main.settings
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -26,7 +26,7 @@ ARG DJANGO_DEBUG
 ENV DJANGO_DEBUG=$DJANGO_DEBUG
 
 # Copy only the settings file first
-COPY main/settings.py /app/portfolio/main/
+COPY main/settings.py portfolio/main/
 
 # Copy manage.py and the apps that need migrations
 COPY manage.py /app/
