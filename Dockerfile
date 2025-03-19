@@ -5,7 +5,7 @@ WORKDIR /app
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
-ENV DJANGO_SETTINGS_MODULE portfolio.main.settings
+# ENV DJANGO_SETTINGS_MODULE portfolio.main.settings
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -37,8 +37,10 @@ ENV DJANGO_DEBUG=$DJANGO_DEBUG
 RUN python -c "from pathlib import Path; Path('db.sqlite3').touch()"
 
 # Run migrations
-RUN python manage.py migrate --database=burger_shop --noinput
-RUN python manage.py migrate --noinput
+# RUN python manage.py migrate --database=burger_shop --noinput
+# RUN python manage.py migrate --noinput
+RUN DJANGO_SETTINGS_MODULE=portfolio.main.settings python manage.py migrate --database=burger_shop --noinput
+RUN DJANGO_SETTINGS_MODULE=portfolio.main.settings python manage.py migrate --noinput
 
 # Copy the rest of the project code
 # COPY portfolio/ /app/portfolio/
