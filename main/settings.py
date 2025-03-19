@@ -160,3 +160,5 @@ LOGOUT_REDIRECT_URL = '/burger_shop/logout/'
 
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
+
+CSRF_TRUSTED_ORIGINS = ['https://airy-grace-production.up.railway.app']
