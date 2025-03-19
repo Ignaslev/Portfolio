@@ -16,17 +16,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY requirements.txt .
 RUN pip install -r requirements.txt
 
-# Copy the project code (minimal initially for migrations)
+# Copy only the settings file first
+COPY portfolio/main/settings.py /app/portfolio/main/
+
+# Copy manage.py and the apps that need migrations
 COPY manage.py /app/
-COPY portfolio/ /app/portfolio/
+COPY portfolio/__init__.py /app/portfolio/
 COPY burger_shop/ /app/burger_shop/
-
-# Define build arguments
-ARG SECRET_KEY
-ENV SECRET_KEY=$SECRET_KEY
-
-ARG DJANGO_DEBUG
-ENV DJANGO_DEBUG=$DJANGO_DEBUG
 
 # Explicitly create the database file if it doesn't exist
 RUN python -c "from pathlib import Path; Path('db.sqlite3').touch()"
@@ -36,7 +32,8 @@ RUN python manage.py migrate --database=burger_shop --noinput
 RUN python manage.py migrate --noinput
 
 # Copy the rest of the project code
-COPY . /app/
+COPY portfolio/ /app/portfolio/
+COPY . /app/  # This should copy everything else
 
 # Collect static files
 RUN python manage.py collectstatic --noinput
