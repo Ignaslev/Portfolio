@@ -48,4 +48,8 @@ RUN chmod +x /usr/local/bin/entrypoint.sh
 EXPOSE 8000
 EXPOSE 80
 
+RUN chmod -R 755 /app/staticfiles && \
+    chown -R www-data:www-data /app/staticfiles
+
+
 CMD ["entrypoint.sh"]
