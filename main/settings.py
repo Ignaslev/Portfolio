@@ -143,7 +143,10 @@ MEDIA_URL = '/media/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Where Django looks for static files during development
-STATICFILES_DIRS = []
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'portfolio', 'static'),
+    os.path.join(BASE_DIR, 'burger_shop', 'static'),
+]
 
 
 # Default primary key field type
