@@ -17,7 +17,7 @@ COPY requirements.txt .
 RUN pip install -r requirements.txt
 
 # Copy only the settings file first
-COPY portfolio/main/settings.py /app/portfolio/main/
+COPY main/settings.py /app/portfolio/main/
 
 # Copy manage.py and the apps that need migrations
 COPY manage.py /app/
