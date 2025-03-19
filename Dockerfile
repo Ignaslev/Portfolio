@@ -23,6 +23,9 @@ COPY . /app
 ARG SECRET_KEY
 ENV SECRET_KEY=$SECRET_KEY
 
+ARG DJANGO_DEBUG
+ENV DJANGO_DEBUG=$DJANGO_DEBUG
+
 # Collect static files
 RUN python manage.py collectstatic --noinput
 
