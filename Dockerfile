@@ -5,7 +5,7 @@ WORKDIR /app
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
-ENV DJANGO_SETTINGS_MODULE main.settings
+ENV DJANGO_SETTINGS_MODULE portfolio.main.settings
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -25,13 +25,13 @@ ENV SECRET_KEY=$SECRET_KEY
 ARG DJANGO_DEBUG
 ENV DJANGO_DEBUG=$DJANGO_DEBUG
 
-# Copy only the settings file first
-COPY main/settings.py portfolio/main/
-
-# Copy manage.py and the apps that need migrations
-COPY manage.py /app/
-COPY portfolio/__init__.py /app/portfolio/
-COPY burger_shop/ /app/burger_shop/
+# # Copy only the settings file first
+# COPY main/settings.py portfolio/main/
+#
+# # Copy manage.py and the apps that need migrations
+# COPY manage.py /app/
+# COPY portfolio/__init__.py /app/portfolio/
+# COPY burger_shop/ /app/burger_shop/
 
 # Explicitly create the database file if it doesn't exist
 RUN python -c "from pathlib import Path; Path('db.sqlite3').touch()"
@@ -41,8 +41,8 @@ RUN python manage.py migrate --database=burger_shop --noinput
 RUN python manage.py migrate --noinput
 
 # Copy the rest of the project code
-COPY portfolio/ /app/portfolio/
-COPY . /app/  # This should copy everything else
+# COPY portfolio/ /app/portfolio/
+# COPY . /app/  # This should copy everything else
 
 # Collect static files
 RUN python manage.py collectstatic --noinput
