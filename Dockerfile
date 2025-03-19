@@ -26,6 +26,9 @@ ENV SECRET_KEY=$SECRET_KEY
 ARG DJANGO_DEBUG
 ENV DJANGO_DEBUG=$DJANGO_DEBUG
 
+# Explicitly create the database file if it doesn't exist
+RUN python -c "from pathlib import Path; Path('db.sqlite3').touch()"
+
 # Collect static files
 RUN python manage.py collectstatic --noinput
 
