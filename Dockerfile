@@ -5,6 +5,7 @@ WORKDIR /app
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
+ENV DJANGO_SETTINGS_MODULE portfolio.main.settings
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -15,8 +16,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY requirements.txt .
 RUN pip install -r requirements.txt
 
-# Copy the project code
-COPY . /app
+COPY . /app/
 
 # Define build arguments
 ARG SECRET_KEY
@@ -31,6 +31,9 @@ RUN python -c "from pathlib import Path; Path('db.sqlite3').touch()"
 # Run migrations
 RUN python manage.py migrate --database=burger_shop --noinput
 RUN python manage.py migrate --noinput
+
+# Collect static files
+RUN python manage.py collectstatic --noinput
 
 # Copy Nginx configuration
 COPY nginx.conf /etc/nginx/sites-available/default
