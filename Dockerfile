@@ -16,6 +16,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY requirements.txt .
 RUN pip install -r requirements.txt
 
+COPY db.sqlite3 .
 # Copy the project code
 COPY . /app
 
