@@ -1,5 +1,4 @@
-ARG PYTHON_VERSION=3.13-slim-bullseye
-FROM python:${PYTHON_VERSION}
+FROM python:3.13-slim-bullseye
 
 WORKDIR /app
 
@@ -16,10 +15,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY requirements.txt .
 RUN pip install -r requirements.txt
 
-# Copy the project code
-COPY . /app
+# Copy the project code (minimal initially for migrations)
+COPY manage.py /app/
+COPY portfolio/ /app/portfolio/
+COPY burger_shop/ /app/burger_shop/
 
-# Define build argument
+# Define build arguments
 ARG SECRET_KEY
 ENV SECRET_KEY=$SECRET_KEY
 
@@ -29,12 +30,15 @@ ENV DJANGO_DEBUG=$DJANGO_DEBUG
 # Explicitly create the database file if it doesn't exist
 RUN python -c "from pathlib import Path; Path('db.sqlite3').touch()"
 
-# Collect static files
-RUN python manage.py collectstatic --noinput
-
 # Run migrations
 RUN python manage.py migrate --database=burger_shop --noinput
 RUN python manage.py migrate --noinput
+
+# Copy the rest of the project code
+COPY . /app/
+
+# Collect static files
+RUN python manage.py collectstatic --noinput
 
 # Copy Nginx configuration
 COPY nginx.conf /etc/nginx/sites-available/default
