@@ -29,6 +29,10 @@ ENV DJANGO_DEBUG=$DJANGO_DEBUG
 # Collect static files
 RUN python manage.py collectstatic --noinput
 
+# Run migrations
+RUN python manage.py migrate --database=burger_shop --noinput
+RUN python manage.py migrate --noinput
+
 # Copy Nginx configuration
 COPY nginx.conf /etc/nginx/sites-available/default
 
