@@ -140,7 +140,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 MEDIA_ROOT = Path(BASE_DIR, 'burger_shop/media')
-MEDIA_URL = '/media/'
+
 
 # Where Django will collect static files
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
@@ -164,3 +164,23 @@ SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 
 CSRF_TRUSTED_ORIGINS = ['https://airy-grace-production.up.railway.app']
+
+# AWS S3 Settings
+AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID')  # Replace with your IAM user's access key ID
+AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY')  # Replace with your IAM user's secret access key
+AWS_STORAGE_BUCKET_NAME = config('AWS_STORAGE_BUCKET_NAME')
+
+AWS_S3_REGION_NAME = config('AWS_S3_REGION_NAME')  # Replace with the AWS region of your bucket (e.g., 'us-east-1')
+AWS_S3_SIGNATURE_VERSION = 's3v4'  # Add this line
+
+AWS_QUERYSTRING_AUTH = False
+
+# Tell Django to use S3 for default file storage
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+# Optional: Custom domain for your S3 bucket (if you want to use one)
+# AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
+# DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+# MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/media/'  # If using custom domain
+# MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/'  # If using custom domain
+MEDIA_URL = 'https://ignasburgershop.s3.eu-north-1.amazonaws.com/media/' # If not using custom domain
