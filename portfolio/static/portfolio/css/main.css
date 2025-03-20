@@ -114,6 +114,7 @@ background-color: #f8f9fa; /* Light gray background */
     width: 70%;
     margin-left: auto; /* Centers the div horizontally */
     margin-right: auto;
+    margin-top: 30px;
 }
 
 .info-title {
@@ -133,4 +134,29 @@ background-color: #f8f9fa; /* Light gray background */
 
 .project-img {
     width: 200px;
+}
+
+
+.education-item {
+  position: relative;
+  padding-left: 30px;
+}
+
+.education-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 10px;
+  width: 2px;
+  background-color: #ccc;
+}
+
+.education-item {
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.emptyspace {
+    margin-top: 40px;
 }
