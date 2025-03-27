@@ -33,6 +33,8 @@ ALLOWED_HOSTS = [
     'airy-grace-production.up.railway.app',
     '127.0.0.1',
     'localhost',
+    'ignascv.com',
+    'www.ignascv.com',
 ]
 
 # Application definition
