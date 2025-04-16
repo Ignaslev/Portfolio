@@ -48,11 +48,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'portfolio',
     'burger_shop.apps.BurgerShopConfig',
+    'solbot',
+    'learn_js',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-'whitenoise.middleware.WhiteNoiseMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -151,6 +153,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'portfolio', 'static'),
     os.path.join(BASE_DIR, 'burger_shop', 'static'),
+    os.path.join(BASE_DIR, 'learn_js', 'static'),
 ]
 
 
@@ -165,7 +168,10 @@ LOGOUT_REDIRECT_URL = '/burger_shop/logout/'
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 
-CSRF_TRUSTED_ORIGINS = ['https://airy-grace-production.up.railway.app']
+CSRF_TRUSTED_ORIGINS = ['https://airy-grace-production.up.railway.app',
+    'https://ignascv.com',
+    'https://www.ignascv.com',
+                        ]
 
 # AWS S3 Settings
 AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID')  # Replace with your IAM user's access key ID
