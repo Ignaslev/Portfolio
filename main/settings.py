@@ -48,8 +48,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'portfolio',
     'burger_shop.apps.BurgerShopConfig',
-    'solbot',
-    'learn_js',
+
 ]
 
 MIDDLEWARE = [
