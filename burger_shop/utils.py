@@ -3,22 +3,13 @@ from django.conf import settings
 import os
 
 
+from io import BytesIO
+from django.core.files.base import ContentFile
+from django.core.files.storage import default_storage
+
 def generate_burger_image(ingredient_images, burger_id, top_bun_image):
     '''
-    Generates a custom burger image by stacking ingredient images.
-
-    Parameters:
-    - ingredient_images: List of ingredient image paths (excluding buns).
-    - burger_id : ID of the CustomBurger(for naming the output image).
-    - top_bun_image: Path to the top bun image.
-
-    Process:
-    - Opens the bottom bun, top bun, and ingredient images.
-    - Stacks them vertically with a small overlap.
-    - Saves the final image in the 'custom_burgers' folder.
-
-    Returns:
-    - str of generated image path
+    Generates a custom burger image and saves it to S3 (or current storage backend).
     '''
     # GET BOTTOM BUN
     bottom_bun_path = os.path.join(settings.MEDIA_ROOT, 'burger_components/bottom-bun.png')
@@ -38,22 +29,22 @@ def generate_burger_image(ingredient_images, burger_id, top_bun_image):
     total_height = sum(img.height for img in all_images)
     max_width = 300
 
-    # PILLOW CREATES EMPTY IMAGE TO BUILD ON
     final_image = Image.new('RGBA', (max_width, total_height), (255, 255, 255, 0))
 
-    # PASTES IMAGES ON BLANK IMAGE ON TOP OF EACHOTHER
     y_offset = 0
     for img in all_images:
         final_image.paste(img, (0, y_offset), img)
         y_offset += img.height - 20
 
-    # SETTING FOLDER WHERE TO SAVE
-    final_folder = os.path.join(settings.MEDIA_ROOT, 'custom_burgers')
-    os.makedirs(final_folder, exist_ok=True)
+    # Save to memory instead of file system
+    buffer = BytesIO()
+    final_image.save(buffer, format='PNG')
+    buffer.seek(0)
 
-    # SAVES FINAL IMAGE WITH CUSTOM NAME( EACH IMAGE HAS ITS CUSTOM BURGER ID)
-    final_path = os.path.join(final_folder, f'custom-burger-id-{burger_id}.png')
-    final_image.save(final_path)
+    image_name = f'custom_burgers/custom-burger-id-{burger_id}.png'
 
-    # RETURN COMPLETE IMAGE PATH TO VIEW TO ASSIGN TO CUSTOM BURGER IN DATABASE
-    return f'custom_burgers/custom-burger-id-{burger_id}.png'
+    # Save using Django's storage (S3 in your case)
+    default_storage.save(image_name, ContentFile(buffer.read()))
+
+    return image_name
+
